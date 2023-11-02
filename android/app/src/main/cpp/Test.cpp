@@ -1,7 +1,7 @@
 #include "Test.h"
 
 namespace example {
-    int Test::runTest() const {
-        return 1337;
+    int Test::runTest(int n) const {
+        return n * 10;
     }
 } // namespace example

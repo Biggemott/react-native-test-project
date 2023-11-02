@@ -32,8 +32,12 @@ function App(): JSX.Element {
 
   const drawingViewRef = useRef<SimpleDrawingView>(null);
 
+
+  let sliderValue = 0;
+
   const onSliderChange = useCallback((values) => {
     drawingViewRef.current?.setNativeProps({figure_rotation: values[0]});
+    sliderValue = values[0]
   }, []);
 
   return (
@@ -76,8 +80,8 @@ function App(): JSX.Element {
             <Button
                 title="Press me"
                 onPress={() => {
-                             console.warn(global.nativeTest.runTest());
-                         }}
+                    console.warn(global.nativeTest.runTest(sliderValue))
+                }}
             />
         </View>
 
