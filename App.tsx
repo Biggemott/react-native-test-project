@@ -10,6 +10,7 @@ import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
   StatusBar,
+  Button,
   useColorScheme,
   View,
   PixelRatio,
@@ -67,6 +68,18 @@ function App(): JSX.Element {
             min={0} max={360} values={[INITIAL_ROTATION]}
             onChange={onSliderChange}
         />
+
+        <View
+            style={{
+                paddingTop: PixelRatio.getPixelSizeForLayoutSize(8)
+            }}>
+            <Button
+                title="Press me"
+                onPress={() => {
+                             console.warn(global.nativeTest.runTest());
+                         }}
+            />
+        </View>
 
     </SafeAreaView>
   );

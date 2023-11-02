@@ -2,7 +2,6 @@ package com.testproject;
 
 import static com.testproject.MainApplication.LOG_TAG;
 
-import android.content.res.Configuration;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 
@@ -10,13 +9,19 @@ import androidx.lifecycle.Lifecycle;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
+import com.facebook.react.ReactInstanceManager;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class MainActivity extends ReactActivity {
+public class MainActivity extends ReactActivity implements ReactInstanceManager.ReactInstanceEventListener {
+
+    static {
+        System.loadLibrary("testproject");
+    }
 
     private Set<GLSurfaceView> surfaceViews = new HashSet<>();
 
@@ -46,6 +51,7 @@ public class MainActivity extends ReactActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        getReactInstanceManager().addReactInstanceEventListener(this);
         for (GLSurfaceView view : surfaceViews) {
             callOnResume(view);
         }
@@ -54,10 +60,18 @@ public class MainActivity extends ReactActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        getReactInstanceManager().removeReactInstanceEventListener(this);
         for (GLSurfaceView view : surfaceViews) {
             callOnPause(view);
         }
     }
+
+    @Override
+    public void onReactContextInitialized(ReactContext context) {
+        install(context.getJavaScriptContextHolder().get());
+    }
+
+    public native void install(long jsContextNativePointer);
 
     public void bindGLSurfaceView(GLSurfaceView view) {
         Log.d(LOG_TAG, "bindGLSurfaceView");
